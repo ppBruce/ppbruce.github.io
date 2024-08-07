@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>藏宝图资源计算 V1.0</title>
+        <style>
+            .center-container {
+                width: fit-content;
+                margin: 0 auto;
+                text-align: left;
+                font-size: 14px; 
+                line-height: 1;
+                font-family: '楷体';
+            }
+            .form-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 10px;
+            }
+            .hidden {
+                display: none;
+            }
+            table{
+                border-collapse:collapse;
+                border: 1px solid #ccc;
+                margin-bottom: 15px;
+            }
+            tr, td{
+                padding: 5px;
+                border: 1px solid #ccc;
+                text-align: center;
+            }
+            .input-cell input{
+                width: 50px;
+                border: none;
+                outline: none;
+            }
+            .input-cell-copy input{
+                width: 55px;
+                border: none;
+                outline: none;
+            }
+            #output {
+            width: 400px; /* 固定宽度 */
+            height: 150px; /* 固定高度 */
+            text-align: left; /* 左对齐 */
+            vertical-align: top;
+            font-size: 16px;
+            white-space: pre-wrap; /* 保留空格和换行 */
+            }
+            #output p {
+            text-indent: 2em;
+            margin: 0; /* 段落之间的间距 */
+            }
+            .red {
+            color: red;
+            }
+            .orange {
+            color: orange;
+            }
+        </style>
+        <script>
+            function show_money() {
+                document.getElementById('money').classList.remove('hidden');
+            }
+            function hide_money() {
+                document.getElementById('money').classList.add('hidden');
+            }
+            function show_captain() {
+                document.getElementById('chuan_captain_star').classList.remove('hidden');
+                document.getElementById('chuan_captain_star_history').classList.add('hidden');
+            }
+            function hide_captain() {
+                document.getElementById('chuan_captain_star').classList.add('hidden');
+                document.getElementById('chuan_captain_star_history').classList.remove('hidden');
+            }
+            function show_member() {
+                document.getElementById('chuan_member_star').classList.remove('hidden');
+                document.getElementById('chuan_member_star_history').classList.add('hidden');
+            }
+            function hide_member() {
+                document.getElementById('chuan_member_star').classList.add('hidden');
+                document.getElementById('chuan_member_star_history').classList.remove('hidden');
+            }
+            window.onload = function() {
+                alert("请阅读并接受使用须知！")
+                document.getElementById('output').innerHTML = '<p>恭贺晚庭风铃族长椰椰酱找到185腹肌清冷少年系男友！</p>'
+            }
+        </script>
+    </head>
+    <body>
+        <h1 style="text-align:center">藏宝图资源计算</h1>
+        <p style="text-align:center; font-family: '楷体'">作者：TapTap 伽罗瓦</p>
+
+        <h3 style="text-align:center">&#9733; 使用须知 &#9733;</h3>
+        <div class="center-container">
+            <p>1、未经作者本人许可，不得将本程序用于任何商业用途。</p>
+            <p>2、本程序主要用于计算活动剩余天数“拉满”情况下的“保底”资源数量。</p>
+            <p>3、本程序给出的建议仅供参考。</p>
+            <p>4、使用本程序当日，请确保凡品至绝品队员奖励次数清空，19片随机碎片领完。</p>
+            <p>5、本程序具体使用说明参见TapTap作者主页相关帖子。</p>
+            <p>6、作者有偿提供一对一藏宝图策略规划服务，有意者请添加微信号Galois14159咨询。</p>
+        </div>
+
+        <h3 style="text-align:center">&#9733; 玩家信息录入 &#9733;</h3>
+
+        <div class="form-container">
+            <label for="leftdays">活动剩余天数：</label>
+            <input id="leftdays" type="number" style="width:50px" min="0" max="28" value="28">
+        </div>
+
+        <div class="form-container">
+            <label>是否已取得传颂队长奖励？</label>
+            <input type="radio" name="captain" value="yes" onclick="hide_captain()"> 是
+            <input type="radio" name="captain" value="no" onclick="show_captain()" id="captain_option" checked> 否
+            <div id="chuan_captain_star">
+                <label for="captain_stars" style="margin-left: 20px">预计击杀传颂队长星级：</label>
+                <input id="captain_stars" type="number" style="width: 50px" min="0" max="4" value="4">
+            </div>
+            <div id="chuan_captain_star_history" class="hidden">
+                <label for="captain_stars_history" style="margin-left: 20px">已击杀传颂队长星级：</label>
+                <input id="captain_stars_history" type="number" style="width: 50px" min="1" max="4" value="4">
+            </div>
+        </div>
+
+        <div class="form-container">
+            <label>是否已取得传颂队员奖励？</label>
+            <input type="radio" name="member" value="yes" onclick="hide_member()"> 是
+            <input type="radio" name="member" value="no" onclick="show_member()" id="member_option" checked> 否
+            <div id="chuan_member_star">
+                <label for="member_stars" style="margin-left: 20px">预计击杀传颂队员星级：</label>
+                <input id="member_stars" type="number" style="width: 50px" min="0" max="4" value="4">
+            </div>
+            <div id="chuan_member_star_history" class='hidden'>
+                <label for="member_stars_history" style="margin-left: 20px">已击杀传颂队员星级：</label>
+                <input id="member_stars_history" type="number" style="width: 50px" min="1" max="4" value="4">
+            </div>
+        </div>
+
+        <div class="form-container">
+            <label for="left_shen_member">剩余神品队员奖励次数：</label>
+            <input id="left_shen_member" type="number" style="width:50px" min="0" max="10" value="10">
+            <label for="left_shen_sp" style="margin-left: 20px">未掉落神品碎片数量：</label>
+            <input id="left_shen_sp" type="number" style="width:50px" min="0" max="15" value="15">
+        </div>
+
+        <table align="center">
+            <tr style="font-weight: bold; background-color:#f1f1f1">
+                <td></td>
+                <td>随机</td>
+                <td>凡</td>
+                <td>珍</td>
+                <td>绝</td>
+                <td>神</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; background-color:#f1f1f1">现有藏宝图数量</td>
+                <td></td>
+                <td class="input-cell"><input id="fan" type="number" min="0" value="0"></td>
+                <td class="input-cell"><input id="zhen" type="number" min="0" value="0"></td>
+                <td class="input-cell"><input id="jue" type="number" min="0" value="0"></td>
+                <td class="input-cell"><input id="shen" type="number" min="0" value="0"></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; background-color:#f1f1f1">现有藏宝图碎片数量</td>
+                <td class="input-cell"><input id="sui_sp_now" type="number" min="0" value="20"></td>
+                <td class="input-cell"><input id="fan_sp_now" type="number" min="0" value="0"></td>
+                <td class="input-cell"><input id="zhen_sp_now" type="number" min="0" value="0"></td>
+                <td class="input-cell"><input id="jue_sp_now" type="number" min="0" value="0"></td>
+                <td class="input-cell"><input id="shen_sp_now" type="number" min="0" value="0"></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; background-color:#f1f1f1">事件未领取藏宝图碎片数量</td>
+                <td class="input-cell"><input id="sui_sp_event" type="number" min="0" max="20" value="20"></td>
+                <td class="input-cell"><input id="fan_sp_event" type="number" min="0" max="8" value="8"></td>
+                <td class="input-cell"><input id="zhen_sp_event" type="number" min="0" max="9" value="9"></td>
+                <td class="input-cell"><input id="jue_sp_event" type="number" min="0" max="5" value="5"></td>
+                <td class="input-cell"><input id="shen_sp_event" type="number" min="0" max="4" value="4"></td>
+            </tr>
+        </table>
+
+        <table align="center">
+            <tr style="font-weight: bold; background-color:#f1f1f1">
+                <td></td>
+                <td>风</td>
+                <td>雷</td>
+                <td>水</td>
+                <td>火</td>
+                <td>通用</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; background-color:#f1f1f1">现有残卷数量</td>
+                <td class="input-cell-copy"><input id="already_wind" type="number" min="0" value="0"></td>
+                <td class="input-cell-copy"><input id="already_thunder" type="number" min="0" value="0"></td>
+                <td class="input-cell-copy"><input id="already_water" type="number" min="0" value="0"></td>
+                <td class="input-cell-copy"><input id="already_fire" type="number" min="0" value="0"></td>
+                <td class="input-cell-copy"><input id="already_common" type="number" min="0" value="0"></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; background-color:#f1f1f1">目标残卷数量</td>
+                <td class="input-cell-copy"><input id="target_wind" type="number" min="0" value="0"></td>
+                <td class="input-cell-copy"><input id="target_thunder" type="number" min="0" value="0"></td>
+                <td class="input-cell-copy"><input id="target_water" type="number" min="0" value="0"></td>
+                <td class="input-cell-copy"><input id="target_fire" type="number" min="0" value="0"></td>
+                <td class="input-cell-copy"><input id="target_common" type="number" min="0" value="3000"></td>
+            </tr>
+        </table>
+
+        <div class="form-container">
+            <label>是否知晓已花费勾玉数量？</label>
+            <input type="radio" name="choice" value="yes" onclick="show_money()" id="magatama"> 是
+            <input type="radio" name="choice" value="no" onclick="hide_money()" checked> 否
+            <div id="money" class="hidden">
+                <label for="cost" style="margin-left: 20px">已花费勾玉数量：</label>
+                <input id="cost" type="number" style="width: 60px" min="0" value="0">
+            </div>
+        </div>
+
+        <div class="form-container">
+            <label>活动开始至今是否每天拉满？</label>
+            <input type="radio" name="attend" value="yes" id="attendance" checked> 是
+            <input type="radio" name="attend" value="no"> 否
+        </div>
+
+        <div class="form-container">
+            <label>是否已兑换宝物图卷？</label>
+            <input type="radio" name="scroll" value="yes"> 是
+            <input type="radio" name="scroll" value="no" id="treasure" checked> 否
+        </div>
+
+        <center><button id="start" style="font-size:16px; margin-top: 10px">开始分析</button></center>
+
+        <h3 style="text-align:center">&#9733; 分析报告 &#9733;</h3>
+
+        <table align="center">
+            <tr style="font-weight: bold; background-color:#f1f1f1">
+                <td></td>
+                <td style="width:45px">随机</td>
+                <td style="width:45px">凡</td>
+                <td style="width:45px">珍</td>
+                <td style="width:45px">绝</td>
+                <td style="width:45px">神</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; background-color:#f1f1f1">藏宝图碎片剩余数量</td>
+                <td id="b1"></td>
+                <td id="b2"></td>
+                <td id="b3"></td>
+                <td id="b4"></td>
+                <td id="b5"></td>
+            </tr>
+        </table>
+
+        <table align="center">
+            <tr style="font-weight: bold; background-color:#f1f1f1">
+                <td></td>
+                <td style="width:70px">风</td>
+                <td style="width:70px">雷</td>
+                <td style="width:70px">水</td>
+                <td style="width:70px">火</td>
+                <td style="width:70px">通用</td>
+                <td style="width:70px">未知属性</td>
+                <td style="width:70px">可选属性</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; background-color:#f1f1f1">残卷数量保底值（算法1）</td>
+                <td id="a11"></td>
+                <td id="a12"></td>
+                <td id="a13"></td>
+                <td id="a14"></td>
+                <td id="a15"></td>
+                <td id="a16"></td>
+                <td id="a17"></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; background-color:#f1f1f1">残卷数量保底值（算法2）</td>
+                <td id="a21"></td>
+                <td id="a22"></td>
+                <td id="a23"></td>
+                <td id="a24"></td>
+                <td id="a25"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; background-color:#f1f1f1">残卷数量预测值</td>
+                <td id="a31"></td>
+                <td id="a32"></td>
+                <td id="a33"></td>
+                <td id="a34"></td>
+                <td id="a35"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; background-color:#f1f1f1">目标残卷数量</td>
+                <td id="target_wind_output"></td>
+                <td id="target_thunder_output"></td>
+                <td id="target_water_output"></td>
+                <td id="target_fire_output"></td>
+                <td id="target_common_output"></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <table align="center">
+            <tr>
+                <td style="font-weight: bold; background-color:#f1f1f1">参考建议</td>
+            </tr>
+            <tr>
+                <td id="output"></td>
+            </tr>
+        </table>
+
+        <script>
+            document.getElementById("start").onclick = main
+            function main()
+            {   
+                // 获取玩家目标残卷数量并在分析中显示
+                var target_wind = parseInt(document.getElementById('target_wind').value)
+                var target_thunder = parseInt(document.getElementById('target_thunder').value)
+                var target_water = parseInt(document.getElementById('target_water').value)
+                var target_fire = parseInt(document.getElementById('target_fire').value)
+                var target_common = parseInt(document.getElementById('target_common').value)
+
+                document.getElementById('target_wind_output').innerHTML = target_wind
+                document.getElementById('target_thunder_output').innerHTML = target_thunder
+                document.getElementById('target_water_output').innerHTML = target_water
+                document.getElementById('target_fire_output').innerHTML = target_fire
+                document.getElementById('target_common_output').innerHTML = target_common
+
+                // 获取玩家手头藏宝图数量
+                var fan = parseInt(document.getElementById('fan').value)
+                var zhen = parseInt(document.getElementById('zhen').value)
+                var jue = parseInt(document.getElementById('jue').value)
+                var shen = parseInt(document.getElementById('shen').value)
+
+                // 获取玩家剩余队员奖励次数
+                var leftdays = parseInt(document.getElementById('leftdays').value)
+                var fan_member = 3*leftdays
+                var zhen_member = 2*leftdays
+                var jue_member = leftdays
+                var shen_member = parseInt(document.getElementById('left_shen_member').value)
+
+                // 获取玩家可获得碎片数量
+                var sui_sp = 19*leftdays + parseInt(document.getElementById('sui_sp_now').value) + parseInt(document.getElementById('sui_sp_event').value)
+                var fan_sp = fan_member + parseInt(document.getElementById('fan_sp_now').value) + parseInt(document.getElementById('fan_sp_event').value)
+                var zhen_sp = zhen_member + parseInt(document.getElementById('zhen_sp_now').value) + parseInt(document.getElementById('zhen_sp_event').value)
+                var jue_sp = jue_member + parseInt(document.getElementById('jue_sp_now').value) + parseInt(document.getElementById('jue_sp_event').value)
+                var shen_sp = parseInt(document.getElementById('left_shen_sp').value) + parseInt(document.getElementById('shen_sp_now').value) + parseInt(document.getElementById('shen_sp_event').value)
+
+                // 计算队员奖励带来的收益
+                var control = 2*fan_member + 4*zhen_member + 8*jue_member + 15*shen_member
+                document.getElementById('a17').innerHTML = control // 输出可选属性残卷数量
+                var common_member = 3*fan_member + 5*zhen_member + 10*jue_member + 20*shen_member
+                var member_option = document.getElementById('member_option') // 考虑传颂队员奖励
+                var member_stars = parseInt(document.getElementById('member_stars').value)
+                if(member_option.checked && member_stars > 0){
+                    common_member += (15 + 15*member_stars)
+                }
+                
+                // 计算队长奖励带来的收益
+
+                var fan_captain = fan + Math.floor(sui_sp/10) // 计算凡品队长次数
+                fan_sp += fan_captain
+                while(fan_sp > 9)
+                {
+                    fan_captain += Math.floor(fan_sp/10)
+                    fan_sp = fan_sp%10 + Math.floor(fan_sp/10)
+                }
+                var zhen_captain = zhen // 计算珍品队长次数
+                zhen_sp += zhen_captain
+                while(zhen_sp > 9)
+                {
+                    zhen_captain += Math.floor(zhen_sp/10)
+                    zhen_sp = zhen_sp%10 + Math.floor(zhen_sp/10)
+                }
+                var jue_captain = jue // 计算绝品队长次数
+                jue_sp += jue_captain
+                while(jue_sp > 9)
+                {
+                    jue_captain += Math.floor(jue_sp/10)
+                    jue_sp = jue_sp%10 + Math.floor(jue_sp/10)
+                }
+                var shen_captain = shen + Math.floor(shen_sp/10) // 计算神品队长次数
+                shen_sp = shen_sp%10
+
+                var uncontrol = 4*fan_captain + 8*zhen_captain + 16*jue_captain + 30*shen_captain
+                document.getElementById('a16').innerHTML = uncontrol // 输出未知属性残卷数量
+                var common_captain = 5*fan_captain + 10*zhen_captain + 20*jue_captain + 40*shen_captain
+                var captain_option = document.getElementById('captain_option') // 考虑传颂队长奖励
+                var captain_stars = parseInt(document.getElementById('captain_stars').value)
+                if(captain_option.checked && captain_stars > 0){
+                    common_captain += (30 + 30*captain_stars)
+                }
+
+                // 输出碎片余量
+                document.getElementById('b1').innerHTML = sui_sp%10
+                document.getElementById('b2').innerHTML = fan_sp
+                document.getElementById('b3').innerHTML = zhen_sp
+                document.getElementById('b4').innerHTML = jue_sp
+                document.getElementById('b5').innerHTML = shen_sp
+
+                // 获取玩家手头残卷数量
+                var already_wind = parseInt(document.getElementById('already_wind').value)
+                var already_thunder = parseInt(document.getElementById('already_thunder').value)
+                var already_water = parseInt(document.getElementById('already_water').value)
+                var already_fire = parseInt(document.getElementById('already_fire').value)
+                var already_common = parseInt(document.getElementById('already_common').value)
+
+                // 补全算法1
+                var common_finall = common_member + common_captain + already_common
+                document.getElementById('a11').innerHTML = already_wind
+                document.getElementById('a12').innerHTML = already_thunder
+                document.getElementById('a13').innerHTML = already_water
+                document.getElementById('a14').innerHTML = already_fire
+                document.getElementById('a15').innerHTML = common_finall
+
+                // 开发算法2
+
+                // 未知属性残卷平均分配
+                var wind_2 = already_wind + Math.floor(uncontrol/4)
+                var thunder_2 = already_thunder + Math.floor(uncontrol/4)
+                var water_2 = already_water + Math.floor(uncontrol/4)
+                var fire_2 = already_fire + uncontrol - 3*Math.floor(uncontrol/4)
+
+                // 可选属性残卷按需分配
+                var control_2 = control
+                var transfer = 0
+                if(wind_2 < target_wind){
+                    transfer = Math.min((target_wind - wind_2), control_2)
+                    wind_2 += transfer
+                    control_2 -= transfer
+                }
+                if(thunder_2 < target_thunder){
+                    transfer = Math.min((target_thunder - thunder_2), control_2)
+                    thunder_2 += transfer
+                    control_2 -= transfer
+                }
+                if(water_2 < target_water){
+                    transfer = Math.min((target_water - water_2), control_2)
+                    water_2 += transfer
+                    control_2 -= transfer
+                }
+                if(fire_2 < target_fire){
+                    transfer = Math.min((target_fire - fire_2), control_2)
+                    fire_2 += transfer
+                    control_2 -= transfer
+                }
+
+                // 多余属性残卷转化为通用
+                var common_2 = common_finall + Math.floor(control_2/2)
+                if(wind_2 > target_wind){
+                    common_2 += Math.floor((wind_2-target_wind)/2)
+                    wind_2 = wind_2 - 2*Math.floor((wind_2-target_wind)/2)
+                }
+                if(thunder_2 > target_thunder){
+                    common_2 += Math.floor((thunder_2-target_thunder)/2)
+                    thunder_2 = thunder_2 - 2*Math.floor((thunder_2-target_thunder)/2)
+                }
+                if(water_2 > target_water){
+                    common_2 += Math.floor((water_2-target_water)/2)
+                    water_2 = water_2 - 2*Math.floor((water_2-target_water)/2)
+                }
+                if(fire_2 > target_fire){
+                    common_2 += Math.floor((fire_2-target_fire)/2)
+                    fire_2 = fire_2 - 2*Math.floor((fire_2-target_fire)/2)
+                }
+
+                // 多余通用按需分配
+                if(common_2 > target_common){
+                    if(wind_2 < target_wind){
+                        transfer = Math.min((common_2 - target_common), target_wind - wind_2)
+                        wind_2 += transfer
+                        common_2 -= transfer
+                    }
+                    if(thunder_2 < target_thunder){
+                        transfer = Math.min((common_2 - target_common), target_thunder - thunder_2)
+                        thunder_2 += transfer
+                        common_2 -= transfer
+                    }
+                    if(water_2 < target_water){
+                        transfer = Math.min((common_2 - target_common), target_water - water_2)
+                        water_2 += transfer
+                        common_2 -= transfer
+                    }
+                    if(fire_2 < target_fire){
+                        transfer = Math.min((common_2 - target_common), target_fire - fire_2)
+                        fire_2 += transfer
+                        common_2 -= transfer
+                    }
+                }
+
+                // 算法2输出
+                document.getElementById('a21').innerHTML = wind_2
+                document.getElementById('a22').innerHTML = thunder_2
+                document.getElementById('a23').innerHTML = water_2
+                document.getElementById('a24').innerHTML = fire_2
+                document.getElementById('a25').innerHTML = common_2
+
+                if(wind_2 < target_wind){
+                    document.getElementById('a21').classList.add('orange')
+                }
+                else{
+                    document.getElementById('a21').classList.remove('orange')
+                }
+                if(thunder_2 < target_thunder){
+                    document.getElementById('a22').classList.add('orange')
+                }
+                else{
+                    document.getElementById('a22').classList.remove('orange')
+                }
+                if(water_2 < target_water){
+                    document.getElementById('a23').classList.add('orange')
+                }
+                else{
+                    document.getElementById('a23').classList.remove('orange')
+                }
+                if(fire_2 < target_fire){
+                    document.getElementById('a24').classList.add('orange')
+                }
+                else{
+                    document.getElementById('a24').classList.remove('orange')
+                }
+                if(common_2 < target_common){
+                    document.getElementById('a25').classList.add('orange')
+                }
+                else{
+                    document.getElementById('a25').classList.remove('orange')
+                }
+
+                // 算法3及操作建议
+
+                // 清空算法3输出
+                document.getElementById('a31').innerHTML = ''
+                document.getElementById('a32').innerHTML = ''
+                document.getElementById('a33').innerHTML = ''
+                document.getElementById('a34').innerHTML = ''
+                document.getElementById('a35').innerHTML = ''
+                document.getElementById('a31').classList.remove('red')
+                document.getElementById('a32').classList.remove('red')
+                document.getElementById('a33').classList.remove('red')
+                document.getElementById('a34').classList.remove('red')
+                document.getElementById('a35').classList.remove('red')
+
+                // 提取目标残卷数量特征
+                var feature = 0
+                if(target_wind > 0){
+                    feature += 1
+                }
+                if(target_thunder > 0){
+                    feature += 1
+                }
+                if(target_water > 0){
+                    feature += 1
+                }
+                if(target_fire > 0){
+                    feature += 1
+                }
+
+                // 分类讨论
+                var advice = ""
+                // 计算初始的保底残卷数量
+                if(document.getElementById('captain_option').checked){
+                    var captain_real = parseInt(document.getElementById('captain_stars').value)
+                }                     
+                else{
+                    var captain_real = parseInt(document.getElementById('captain_stars_history').value)  
+                }
+                if(document.getElementById('member_option').checked){
+                    var member_real = parseInt(document.getElementById('member_stars').value)
+                }
+                else{
+                    var member_real = parseInt(document.getElementById('member_stars_history').value)
+                }
+                var original = 0
+                if(captain_real === 0){
+                    original -= 150
+                }
+                else{
+                    original -= 30*(4-captain_real)
+                }
+                if(member_real === 0){
+                    original -= 75
+                }
+                else{
+                    original -= 15*(4-member_real)
+                }
+                // 仅需要通用残卷
+                if(feature === 0 && target_common > 0){
+                    document.getElementById('a31').innerHTML = 0
+                    document.getElementById('a32').innerHTML = 0
+                    document.getElementById('a33').innerHTML = 0
+                    document.getElementById('a34').innerHTML = 0
+                    if(leftdays === 28){
+                        var common_3 = common_2 + 392
+                        common_3 = 10*Math.floor(common_3/10) 
+                        document.getElementById('a35').innerHTML = common_3 // 输出算法3结果
+                        if(target_common <= common_2){
+                            advice += '<p>只要保证活动期间白嫖拉满，且不在商店消耗随机碎片，就能稳稳上岸~</p>'
+                        }
+                        else if(target_common <= common_3){
+                            advice += '<p>按照经验，不花费勾玉，拉满大约能获取'+common_3+'片通用残卷，还是很可能白嫖上岸哒~</p>'
+                        }
+                        else{
+                            advice += '<p>按照经验，白嫖拉满仅能获取大约'+common_3+'片通用残卷，离目标大概还差'+(target_common-common_3)+'片~</p>' +
+                                '<p>欲知详细的操作方案和较精确的勾玉花费估计，请参见TapTap作者主页相关帖子或与作者私聊~</p>'
+                            document.getElementById('a35').classList.add('red')
+                        }
+                    }
+                    else if(leftdays > 0){
+                        if(document.getElementById('treasure').checked && document.getElementById('attendance').checked){
+                            original += 2368
+                            // 计算保底增长速率与预测未来
+                            var common_speed = (common_2-original)/(28-leftdays)
+                            common_speed = parseFloat(common_speed.toFixed(1))
+                            var common_3 = Math.floor(common_2 + common_speed*leftdays)
+                            if(common_speed < 0){
+                                document.getElementById('a31').innerHTML = ''
+                                document.getElementById('a32').innerHTML = ''
+                                document.getElementById('a33').innerHTML = ''
+                                document.getElementById('a34').innerHTML = ''
+                                if(target_common <= common_2){
+                                    advice += '<p>只要保证活动剩余天数白嫖拉满，且不在商店消耗随机碎片，就能稳稳上岸~</p>'
+                                }
+                                else{
+                                    advice += '<p>通用残卷保底数量出现了负增长！请认真检查有无正确录入玩家信息。若检查无误，则该现象大概率是在商店花费随机碎片所致，请及时止损！</p>'
+                                }
+                            }
+                            else{
+                                document.getElementById('a35').innerHTML = common_3
+                                if(target_common <= common_2){
+                                    advice += '<p>只要保证活动剩余天数白嫖拉满，且不在商店消耗随机碎片，就能稳稳上岸~</p>'
+                                }
+                                else if(target_common <= common_3){
+                                    if(document.getElementById('magatama').checked){
+                                        var cost = parseInt(document.getElementById('cost').value)
+                                        if(cost > 0){
+                                            if(common_speed > 12){
+                                                var freeday = Math.floor((common_3-target_common)/(common_speed-12)) // 计算贤者模式天数
+                                                var daily_cost = cost/(28-leftdays) // 计算每日勾玉花费
+                                                var pre_cost = Math.floor((leftdays-freeday)*daily_cost) // 估算未来投入
+                                                var eff = cost/(common_2-original) // 计算策略效益(保留两位系小数)
+                                                eff = parseFloat(eff.toFixed(2))
+                                                if(freeday === 0){
+                                                    advice += '<p>当前通用残卷保底数量增长速率为'+common_speed+'片/天，每增加1片通用残卷，平均花费'+eff+'勾玉。</p>'+
+                                                        '<p>请保持当前策略直至活动结束，预计还需花费'+pre_cost+'勾玉，方可上岸~</p>'
+                                                }
+                                                else if(freeday >= leftdays){
+                                                    advice += '<p>恭喜！活动剩余天数大概率已无需花费勾玉，保持白嫖拉满即可上岸！</p>'
+                                                }
+                                                else{
+                                                    // 计算开启贤者模式日期
+                                                    if(freeday > 4){
+                                                        advice += '<p>当前通用残卷保底数量增长速率为'+common_speed+'片/天，每增加1片通用残卷，平均花费'+eff+'勾玉。</p>'+
+                                                            '<p>请保持当前策略直至8月'+(35-freeday)+'日，预计还需花费'+pre_cost+'勾玉，从8月'+(36-freeday)+'日起至活动结束则可选择白嫖拉满，大概率能够上岸~</p>'
+                                                    }
+                                                    else if(freeday === 4){
+                                                        advice += '<p>当前通用残卷保底数量增长速率为'+common_speed+'片/天，每增加1片通用残卷，平均花费'+eff+'勾玉。</p>'+
+                                                            '<p>请保持当前策略直至8月31日，预计还需花费'+pre_cost+'勾玉，从9月1日起至活动结束则可选择白嫖拉满，大概率能够上岸~</p>'
+                                                    }
+                                                    else{
+                                                        advice += '<p>当前通用残卷保底数量增长速率为'+common_speed+'片/天，每增加1片通用残卷，平均花费'+eff+'勾玉。</p>'+
+                                                            '<p>请保持当前策略直至9月'+(4-freeday)+'日，预计还需花费'+pre_cost+'勾玉，从8月'+(5-freeday)+'日起至活动结束则可选择白嫖拉满，大概率能够上岸~</p>'
+                                                    }
+                                                }
+                                            }
+                                            else{
+                                                advice += '<p>恭喜！活动剩余天数大概率已无需花费勾玉，保持白嫖拉满即可上岸！</p>'
+                                            }
+                                        }
+                                        else{
+                                            advice += '<p>作为一名白嫖玩家，当前通用残卷保底数量增长速率为'+common_speed+'片/天，'+
+                                                '若保持当前策略，活动结束大约可获得'+common_3+'片通用残卷，很有可能零勾玉上岸哦！</p>'
+                                        }
+                                    }
+                                    else{
+                                        if(common_speed > 12){
+                                            var freeday = Math.floor((common_3-target_common)/(common_speed-12)) // 计算贤者模式天数
+                                            if(freeday === 0){
+                                                advice += '<p>当前通用残卷保底数量增长速率为'+common_speed+'片/天，请保持当前策略直至活动结束，大概率能够上岸~</p>'
+                                            }
+                                            else if(freeday >= leftdays){
+                                                advice += '<p>恭喜！活动剩余天数大概率已无需花费勾玉，保持白嫖拉满即可上岸！</p>'
+                                            }
+                                            else{
+                                                // 计算开启贤者模式日期
+                                                if(freeday > 4){
+                                                    advice += '<p>当前通用残卷保底数量增长速率为'+common_speed+'片/天，请保持当前策略直至8月'+(35-freeday)+'日，从8月'+
+                                                        (36-freeday)+'日起至活动结束则可选择白嫖拉满，大概率能够上岸~</p>'
+                                                }
+                                                else if(freeday === 4){
+                                                    advice += '<p>当前通用残卷保底数量增长速率为'+common_speed+'片/天，请保持当前策略直至8月31日，'+
+                                                        '从9月1日起至活动结束则可选择白嫖拉满，大概率能够上岸~</p>'
+                                                }
+                                                else{
+                                                    advice += '<p>当前通用残卷保底数量增长速率为'+common_speed+'片/天，请保持当前策略直至9月'+(4-freeday)+'日，从8月'+
+                                                        (5-freeday)+'日起至活动结束则可选择白嫖拉满，大概率能够上岸~</p>'
+                                                }
+                                            }
+                                        }
+                                        else{
+                                            advice += '<p>恭喜！活动剩余天数大概率已无需花费勾玉，保持白嫖拉满即可上岸！</p>'
+                                        }
+                                    }
+                                }
+                                else{
+                                    advice += '<p>当前通用残卷保底数量增长速率为'+common_speed+'片/天，若保持当前策略，活动结束大约可获得'+
+                                        common_3+'片通用残卷，距离目标还差'+(target_common-common_3)+'片。</p>'+
+                                        '<p>建议改变当前策略，加速资源获取。具体操作方式请参见TapTap作者主页相关帖子或与作者私聊~</p>'
+                                    document.getElementById('a35').classList.add('red')
+                                }
+                            }
+                        }
+                        else{
+                            var common_3 = common_2 + leftdays*14
+                            common_3 = 10*Math.floor(common_3/10)
+                            document.getElementById('a35').innerHTML = common_3
+                            if(target_common <= common_2){
+                                advice += '<p>只要保证活动剩余天数白嫖拉满，且不在商店消耗随机碎片，就能稳稳上岸~</p>'
+                            }
+                            else if(target_common <= common_3){
+                                advice += '<p>按照经验，剩余天数白嫖拉满大约能获取'+common_3+'片通用残卷，之后有概率不用花费勾玉啦~</p>'
+                            }
+                            else{
+                                advice += '<p>按照经验，剩余天数白嫖拉满仅能获取大约'+common_3+'片通用残卷，离目标大概还差'+(target_common-common_3)+'片~</p>' +
+                                    '<p>欲知详细的操作方案和较精确的勾玉花费估计，请参见TapTap作者主页相关帖子或与作者私聊~</p>'
+                                document.getElementById('a35').classList.add('red')
+                            }
+                        }
+                    }
+                    else{
+                        document.getElementById('a31').innerHTML = ''
+                        document.getElementById('a32').innerHTML = ''
+                        document.getElementById('a33').innerHTML = ''
+                        document.getElementById('a34').innerHTML = ''
+                        if(common_2 >= target_common){
+                            advice += '<p>感谢忍忍一路以来的支持！恭喜上岸！</p>'
+                        }
+                        else{
+                            advice += '<p>似乎离目标还有一点距离呢，赶紧看看有无啥补救措施！</p>'
+                        } 
+                    } 
+                }
+                // 仅需要一类属性残卷
+                else if(feature === 1 && target_common === 0){
+                    if(leftdays === 0){
+                        advice += '<p>活动收官啦，感谢忍忍的支持！</p>'+
+                            '<p>若算法二中出现橙色字体，说明对应残卷数量可能不足，请想办法补救~</p>'
+                    }
+                    else{
+                        advice = "<p>由于只想要兑换某一种属性残卷的忍忍数量较少，本程序相应的预测功能尚未上线，敬请期待！</p>"+
+                            "<p>若实在需要帮助，请参考TapTap作者主页相关帖子或与作者私聊~</p>"
+                    }
+                }
+                // 错误输入目标残卷数量
+                else if(feature === 0 && target_common === 0){
+                    advice = "<p>宝子忘记输入目标残卷数量信息啦！</p>"
+                }
+                // 其它目标
+                else{
+                    if(leftdays === 0){
+                        advice += '<p>活动收官啦，感谢忍忍的支持！</p>'+
+                            '<p>若算法二中出现橙色字体，说明对应残卷数量可能不足，请想办法补救~</p>'
+                    }
+                    else{
+                        advice = "<p>忍忍的目标残卷分布有些复杂，相应的预测算法还在研究中，敬请期待！</p>"+
+                            '<p>若实在需要帮助，请参考TapTap作者主页相关帖子或与作者私聊~</p>'
+                    }
+                }
+
+                document.getElementById('output').innerHTML = advice // 输出参考建议
+            }
+        </script>
+    </body>
+</html>
